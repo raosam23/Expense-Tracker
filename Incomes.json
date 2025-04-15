@@ -1,0 +1,10 @@
+[
+  { "category": "Salary", "title": "Monthly Salary - March", "amount": 50000 },
+  { "category": "Freelance", "title": "Website Project Payment", "amount": 12000 },
+  { "category": "Investments", "title": "Stock Dividends", "amount": 2500 },
+  { "category": "Salary", "title": "Bonus", "amount": 7000 },
+  { "category": "Other", "title": "Gift from Family", "amount": 1500 },
+  { "category": "Freelance", "title": "Logo Design", "amount": 3000 },
+  { "category": "Investments", "title": "Mutual Fund Withdrawal", "amount": 4000 },
+  { "category": "Other", "title": "Rent from Sublet", "amount": 3500 }
+]
