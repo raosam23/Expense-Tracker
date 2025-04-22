@@ -12,23 +12,22 @@ const AddTransactionForm = (props : AddTransactionFormProps) => {
         e.preventDefault();
         if (props.type === 'expense') {
             try{
-                const response = await axios.post('/api/addExpense', {
+                await axios.post('/api/addExpense', {
                     title,
                     amount,
                     category,
                 });
-                console.log("Data pushed",response);
             } catch (err: unknown) {
                 console.log(err);
             }
         } else if(props.type === 'income') {
             try{
-                const response = await axios.post('/api/addIncome', {
+                await axios.post('/api/addIncome', {
                     title,
                     amount,
                     category,
                 });
-                console.log("Data pushed",response);
+                console.log("Income added successfully");
             } catch (err: unknown) {
                 console.log(err);
             }

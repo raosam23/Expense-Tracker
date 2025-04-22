@@ -1,14 +1,32 @@
-import React from 'react'
+'use client';
+import React, {useState, useEffect} from 'react'
 import TransactionsCard from "@/app/components/TransactionsCard";
-import expenses from '@/Expenses.json';
+import axios from "axios";
+
+type TransactionType = {
+    title: string,
+    amount: number,
+    category: string,
+}
 
 const Expenses = () => {
+    const [data, setData] = useState<TransactionType[]>([]);
+    useEffect(() => {
+        (async () => {
+            try {
+                const res = await axios.get('/api/addExpense');
+                setData(res.data.data);
+            } catch (e) {
+                console.error(`Failed to fetch data: ${e}`);
+            }
+        })();
+    }, []);
   return (
     <div className="flex flex-col items-center max-w-fit  mx-2.5">
         <h1 className="text-3xl text-center font-bold">Expenses</h1>
-        {expenses.map((expense, index: number) => (
+        {data.length > 0 ? data.map((expense, index: number) => (
             <TransactionsCard key={index} title={expense.title} category={expense.category} amount={expense.amount} />
-        ))}
+        )) : <p className="my-4 text-xl text-center font-bold text-green-950">No transactions yet</p>}
     </div>
   )
 }

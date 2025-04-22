@@ -4,7 +4,7 @@ import Incomes from "@/app/components/Incomes";import ExpensesIncomePie from "@/
 export default function Dashboard() {
     return (
         <>
-            <div className="flex flex-row justify-center min-h-screen min-w-auto">
+            <div className="flex flex-row justify-center min-w-auto">
                 <Expenses />
                 <Incomes />
             </div>

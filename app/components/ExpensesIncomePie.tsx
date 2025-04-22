@@ -1,27 +1,45 @@
 'use client';
 import {Pie} from "react-chartjs-2";
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from "chart.js";
-import incomes from '@/Incomes.json'
-import expenses from '@/Expenses.json'
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+type TransactionType = {
+    title: string,
+    amount: number,
+    category: string,
+}
+
 const ExpensesIncomePie = () => {
+    const [incomesData, setIncomesData] = useState<TransactionType[]>([]);
+    const [expensesData, setExpensesData] = useState<TransactionType[]>([]);
+    useEffect(() => {(async () => {
+        try {
+            const exRes = await axios.get('/api/addExpense');
+            const inRes = await axios.get('/api/addIncome');
+            setIncomesData(inRes.data.data);
+            setExpensesData(exRes.data.data);
+        } catch (e) {
+            console.error(`Failed to fetch data: ${e}`);
+        }
+    })();
+    }, []);
     const [expenseTotal, setExpenseTotal] = React.useState<number>(0);
     const [incomeTotal, setIncomeTotal] = React.useState<number>(0);
     useEffect(() => {
         let eTotal: number = 0;
         let iTotal: number = 0;
-        expenses.map(expense => {
+        expensesData.map(expense => {
             eTotal += expense.amount;
         });
-        incomes.map(income => {
+        incomesData.map(income => {
             iTotal += income.amount;
         });
         setExpenseTotal(eTotal);
         setIncomeTotal(iTotal);
-    }, [incomes, expenses]);
+    }, [incomesData, expensesData]);
     const data = {
         labels: ['Expenses', 'Income'],
         datasets: [
@@ -32,15 +50,16 @@ const ExpensesIncomePie = () => {
             },
         ],
     };
+    if(incomeTotal === 0 && expenseTotal === 0) return null;
     return (
         <div className="bg-green-200 rounded-lg shadow-md p-6 m-4 w-fit mx-auto">
             <h1 className="text-2xl text-center font-bold mb-4">Dashboard Summary</h1>
-            <p className="text-center text-xl text-green-800 mb-1">
+            {incomeTotal > 0 && <p className="text-center text-xl text-green-800 mb-1">
                 Incomes: ₹{incomeTotal}
-            </p>
-            <p className="text-center text-xl text-red-500 mb-4">
+            </p>}
+            {expenseTotal > 0 && <p className="text-center text-xl text-red-500 mb-4">
                 Expenses: ₹{expenseTotal}
-            </p>
+            </p>}
             <div className="w-full max-w-sm mx-auto">
                 <Pie data={data} />
             </div>

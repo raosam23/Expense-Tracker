@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Calculate your expense, find out what you are spending on...",
 };
 
-let getCurrentYear = (): number => {
+const getCurrentYear = (): number => {
   return new Date().getFullYear();
 }
 
