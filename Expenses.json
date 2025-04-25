@@ -1,17 +1,30 @@
 [
-  { "category": "Food", "title": "Groceries", "amount": 1250 },
-  { "category": "Housing", "title": "Rent", "amount": 9500 },
-  { "category": "Utilities", "title": "Electricity Bill", "amount": 1600 },
-  { "category": "Utilities", "title": "Internet Recharge", "amount": 999 },
-  { "category": "Subscriptions", "title": "Netflix Subscription", "amount": 649 },
-  { "category": "Transport", "title": "Petrol", "amount": 2200 },
-  { "category": "Food", "title": "Restaurant - Cafe Coffee Day", "amount": 430 },
-  { "category": "Debt", "title": "Phone EMI", "amount": 2500 },
-  { "category": "Fitness", "title": "Gym Membership", "amount": 999 },
-  { "category": "Health", "title": "Medical - Pharmacy", "amount": 820 },
-  { "category": "Transport", "title": "Train Ticket - Bangalore to Kochi", "amount": 1450 },
-  { "category": "Food", "title": "Zomato Order", "amount": 560 },
-  { "category": "Shopping", "title": "Clothes Shopping - Myntra", "amount": 2750 },
-  { "category": "Food", "title": "Quick Commerce - Zepto", "amount": 320 },
-  { "category": "Shopping", "title": "Book Purchase - Amazon", "amount": 480 }
+  {
+    "title": "eee",
+    "amount": 222,
+    "category": "eee",
+    "_id": 1,
+    "create_at": "1745439459776"
+  },
+  {
+    "title": "fff",
+    "amount": 3333,
+    "category": "ffff",
+    "_id": 2,
+    "create_at": "1745439467829"
+  },
+  {
+    "title": "333",
+    "amount": 333,
+    "category": "3333",
+    "_id": 3,
+    "create_at": "2025-04-23T20:19:37.344Z"
+  },
+  {
+    "title": "buying Niggers",
+    "amount": 30000,
+    "category": "Shopping",
+    "_id": 4,
+    "create_at": "2025-04-25T11:14:01.548Z"
+  }
 ]

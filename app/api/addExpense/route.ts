@@ -10,6 +10,8 @@ export async function POST (req: NextRequest) {
         const filepath: string = path.join(process.cwd(), '/Expenses.json');
         const fileExists: boolean = fs.existsSync(filepath);
         const existingData = fileExists ? JSON.parse(fs.readFileSync(filepath, 'utf-8')) : [];
+        body._id = existingData.length > 0 ? existingData[existingData.length - 1]._id + 1 : 1;
+        body.create_at = new Date().toISOString();
         existingData.push(body);
         fs.writeFileSync(filepath, JSON.stringify(existingData, null, 2));
         return NextResponse.json({success: true,}, {status: 200});
