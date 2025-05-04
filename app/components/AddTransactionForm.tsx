@@ -1,10 +1,12 @@
 'use client';
 import React from 'react';
 import axios from 'axios';
+import {useRouter} from 'next/navigation'
 interface AddTransactionFormProps {
     type: 'expense' | 'income';
 }
 const AddTransactionForm = (props : AddTransactionFormProps) => {
+    const router = useRouter();
     const [title, setTitle] = React.useState<string>('');
     const [amount, setAmount] = React.useState<string>('');
     const [category, setCategory] = React.useState<string>('');
@@ -35,6 +37,7 @@ const AddTransactionForm = (props : AddTransactionFormProps) => {
         setTitle('');
         setAmount('');
         setCategory('');
+        router.push('/dashboard');
     }
     return (
         <form onSubmit={handleOnSubmit} className="bg-green-200 rounded-lg shadow-md p-6 m-4 w-auto max-w-lg mx-auto space-y-3">

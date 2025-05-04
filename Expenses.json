@@ -1,30 +1,9 @@
 [
   {
-    "title": "eee",
-    "amount": 222,
-    "category": "eee",
+    "title": "dfd",
+    "amount": 33,
+    "category": "fff",
     "_id": 1,
-    "create_at": "1745439459776"
-  },
-  {
-    "title": "fff",
-    "amount": 3333,
-    "category": "ffff",
-    "_id": 2,
-    "create_at": "1745439467829"
-  },
-  {
-    "title": "333",
-    "amount": 333,
-    "category": "3333",
-    "_id": 3,
-    "create_at": "2025-04-23T20:19:37.344Z"
-  },
-  {
-    "title": "buying Niggers",
-    "amount": 30000,
-    "category": "Shopping",
-    "_id": 4,
-    "create_at": "2025-04-25T11:14:01.548Z"
+    "create_at": "4 May 2025, 1:25 pm"
   }
 ]

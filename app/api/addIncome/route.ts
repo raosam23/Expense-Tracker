@@ -11,7 +11,7 @@ export async function POST (req: NextRequest) {
         const fileExists: boolean = fs.existsSync(filepath);
         const existingData = fileExists ? JSON.parse(fs.readFileSync(filepath, 'utf-8')) : [];
         body._id = existingData.length > 0 ? existingData[existingData.length - 1]._id + 1 : 1;
-        body.create_at = new Date().toISOString();
+        body.create_at = new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
         existingData.push(body);
         fs.writeFileSync(filepath, JSON.stringify(existingData, null, 2));
         return NextResponse.json({success: true,}, {status: 200});
@@ -30,5 +30,28 @@ export async function GET() {
     } catch(e: unknown) {
         const err = e as Error;
         return NextResponse.json({success: false, message: err.message},{status: 500})
+    }
+}
+
+export async function DELETE (req: NextRequest) {
+    try {
+        const url = new URL(req.url);
+        const id: string|null = url.searchParams.get('id');
+        if(!id) {
+            return NextResponse.json({success:false, message: 'Income not found'}, {status: 400});
+        }
+        const filepath: string = path.join(process.cwd(), '/Incomes.json');
+        const fileExists: boolean = fs.existsSync(filepath);
+        if(!fileExists) {
+            return NextResponse.json({success: false, message: 'Incomes file not found'}, {status: 404});
+        }
+
+        const existingData = JSON.parse(fs.readFileSync(filepath, 'utf-8'));
+        const filteredData = existingData.filter((data : {_id: number}) => data._id !== Number(id))
+        fs.writeFileSync(filepath, JSON.stringify(filteredData, null, 2));
+        return NextResponse.json({success: true, message: 'Income deleted'}, {status: 200});
+    } catch (e: unknown) {
+        const err = e as Error;
+        return NextResponse.json({success: false, message: err.message}, {status: 500});
     }
 }

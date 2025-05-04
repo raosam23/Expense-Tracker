@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from "next/link";
-import {type} from "node:os";
+import axios from "axios";
+import {useRouter} from "next/navigation";
 
 type ExpensesCardProps = {
     title: string;
@@ -11,11 +12,24 @@ type ExpensesCardProps = {
 }
 
 const TransactionsCard = (props: ExpensesCardProps) => {
-    console.log("The id is ",props._id)
-
+    const router = useRouter();
+    const handleXOnClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+        try {
+            if(props.type === 'income')
+                await axios.delete('/api/addIncome?id='+props._id);
+            else if(props.type === 'expenses')
+                await axios.delete('/api/addExpense?id='+props._id);
+        } catch (error) {
+            console.error(error);
+        }
+        window.location.reload();
+    }
     return (
       <Link href={`/dashboard/${props.type}/${props._id}`}>
-          <div className="w-fit min-w-64 min-h-24 bg-green-100 rounded-lg shadow-xs shadow-green-950 p-4 m-5">
+          <div className="relative w-fit min-w-64 min-h-24 bg-green-100 rounded-lg shadow-xs shadow-green-950 p-4 m-5">
+              <button onClick={handleXOnClick} className="absolute top-2.5 right-3 text-green-800 font-bold hover:text-red-600">X</button>
               <h3 className="text-lg font-semibold text-green-800">{props.title}</h3>
               <p className="text-sm text-customGreen">Amount: ₹{props.amount}</p>
           </div>
