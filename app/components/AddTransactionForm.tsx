@@ -12,6 +12,10 @@ const AddTransactionForm = (props : AddTransactionFormProps) => {
     const [category, setCategory] = React.useState<string>('');
     const handleOnSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if(!(title && amount && category)) {
+            console.warn('Please enter a valid amount field');
+            return;
+        }
         if (props.type === 'expense') {
             try{
                 await axios.post('/api/addExpense', {
@@ -40,7 +44,8 @@ const AddTransactionForm = (props : AddTransactionFormProps) => {
         router.push('/dashboard');
     }
     return (
-        <form onSubmit={handleOnSubmit} className="bg-green-200 rounded-lg shadow-md p-6 m-4 w-auto max-w-lg mx-auto space-y-3">
+        <form onSubmit={handleOnSubmit} className="bg-green-200 rounded-lg shadow-md p-6 m-4 w-auto max-w-lg mx-auto
+        space-y-3">
             <h2 className="text-center text-2xl">Add {props.type === 'expense' ? 'expense' : 'income'}</h2>
             <input
                 type="text"
@@ -54,7 +59,8 @@ const AddTransactionForm = (props : AddTransactionFormProps) => {
                 placeholder="Amount"
                 value={amount || ''}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-400 [appearance:textfield]"
+                className="w-full border p-2 rounded focus:outline-none focus:ring-2
+                focus:ring-green-400 [appearance:textfield]"
             />
 
             <input
@@ -68,7 +74,9 @@ const AddTransactionForm = (props : AddTransactionFormProps) => {
             <div className="flex justify-center">
               <button
                   type="submit"
-                  className="bg-green-500 text-white w-fit p-2 rounded hover:bg-green-600"
+                  disabled={!(title && category && amount)}
+                  className="bg-green-500 text-white w-fit p-2 rounded cursor-pointer hover:bg-green-600
+                  disabled:bg-green-300 disabled:cursor-not-allowed"
               >
                   Add {props.type === 'expense' ? 'Expense' : 'Income'}
               </button>

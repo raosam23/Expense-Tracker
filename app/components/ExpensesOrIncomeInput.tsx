@@ -11,7 +11,7 @@ const ExpensesOrIncomeInput = () => {
                 onClick={() => setFormType('expense')}
                 className={`px-4 py-2 rounded ${
                     formType === 'expense' ? 'bg-red-400 text-white' : 'bg-gray-200'
-                }`}
+                } cursor-pointer`}
             >
                 ➕ Add Expense
             </button>
@@ -20,7 +20,7 @@ const ExpensesOrIncomeInput = () => {
                 onClick={() => setFormType('income')}
                 className={`px-4 py-2 rounded ${
                     formType === 'income' ? 'bg-green-400 text-white' : 'bg-gray-200'
-                }`}
+                } cursor-pointer`}
             >
                 ➕ Add Income
             </button>
