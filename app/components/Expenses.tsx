@@ -2,13 +2,7 @@
 import React, {useState, useEffect} from 'react'
 import TransactionsCard from "@/app/components/TransactionsCard";
 import axios from "axios";
-
-type TransactionType = {
-    title: string,
-    amount: number,
-    category: string,
-    _id: number,
-}
+import {TransactionType} from "@/app/types/TransactionType";
 
 const Expenses = () => {
     const [data, setData] = useState<TransactionType[]>([]);
@@ -26,7 +20,7 @@ const Expenses = () => {
     <div className="flex flex-col items-center max-w-fit  mx-2.5">
         <h1 className="text-3xl text-center font-bold">Expenses</h1>
         {data.length > 0 ? data.map((expense, index: number) => (
-            <TransactionsCard key={index} title={expense.title} category={expense.category} amount={expense.amount} _id = {expense._id} type={"expenses"}/>
+            <TransactionsCard key={index} title={expense.title} note={expense.note} amount={Number(expense.amount)} _id = {Number(expense._id)} type={"expenses"}/>
         )) : <p className="my-4 text-xl text-center font-bold text-green-950">No transactions yet</p>}
     </div>
   )

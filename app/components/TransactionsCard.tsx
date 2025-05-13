@@ -1,18 +1,16 @@
 import React from 'react'
 import Link from "next/link";
 import axios from "axios";
-import {useRouter} from "next/navigation";
 
-type ExpensesCardProps = {
+interface ExpensesCardProps {
     title: string;
-    category: string;
+    note: string;
     amount: number;
     _id: number;
     type: string;
 }
 
 const TransactionsCard = (props: ExpensesCardProps) => {
-    const router = useRouter();
     const handleXOnClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();

@@ -3,14 +3,9 @@ import {Pie} from "react-chartjs-2";
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from "chart.js";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import {TransactionType} from "@/app/types/TransactionType";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-type TransactionType = {
-    title: string,
-    amount: number,
-    category: string,
-}
 
 const ExpensesIncomePie = () => {
     const [incomesData, setIncomesData] = useState<TransactionType[]>([]);
@@ -32,10 +27,10 @@ const ExpensesIncomePie = () => {
         let eTotal: number = 0;
         let iTotal: number = 0;
         expensesData.map(expense => {
-            eTotal += expense.amount;
+            eTotal += Number(expense.amount);
         });
         incomesData.map(income => {
-            iTotal += income.amount;
+            iTotal += Number(income.amount);
         });
         setExpenseTotal(eTotal);
         setIncomeTotal(iTotal);

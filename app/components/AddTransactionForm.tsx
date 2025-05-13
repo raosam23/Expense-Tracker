@@ -1,18 +1,32 @@
 'use client';
-import React from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import {useRouter} from 'next/navigation'
+import {TransactionType} from "@/app/types/TransactionType";
+
 interface AddTransactionFormProps {
     type: 'expense' | 'income';
 }
 const AddTransactionForm = (props : AddTransactionFormProps) => {
     const router = useRouter();
-    const [title, setTitle] = React.useState<string>('');
-    const [amount, setAmount] = React.useState<string>('');
-    const [category, setCategory] = React.useState<string>('');
+    const [transactionData, setTransactionData] = useState<TransactionType>({
+        title: '',
+        amount: '',
+        note: ''
+    });
+
+    const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const {value, name} =  event.target;
+        setTransactionData((prevData: TransactionType) => ({
+            ...prevData,
+            [name]: value
+        }));
+    }
+
     const handleOnSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if(!(title && amount && category)) {
+        const {title, amount, note} = transactionData;
+        if(!(title && amount && note)) {
             console.warn('Please enter a valid amount field');
             return;
         }
@@ -21,7 +35,7 @@ const AddTransactionForm = (props : AddTransactionFormProps) => {
                 await axios.post('/api/addExpense', {
                     title,
                     amount,
-                    category,
+                    note,
                 });
             } catch (err: unknown) {
                 console.log(err);
@@ -31,16 +45,18 @@ const AddTransactionForm = (props : AddTransactionFormProps) => {
                 await axios.post('/api/addIncome', {
                     title,
                     amount,
-                    category,
+                    note,
                 });
                 console.log("Income added successfully");
             } catch (err: unknown) {
                 console.log(err);
             }
         }
-        setTitle('');
-        setAmount('');
-        setCategory('');
+        setTransactionData({
+            title: '',
+            amount: '',
+            note: ''
+        })
         router.push('/dashboard');
     }
     return (
@@ -50,31 +66,34 @@ const AddTransactionForm = (props : AddTransactionFormProps) => {
             <input
                 type="text"
                 placeholder="Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={transactionData.title}
+                name="title"
+                onChange={handleOnChange}
                 className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
             />
             <input
                 type="number"
                 placeholder="Amount"
-                value={amount || ''}
-                onChange={(e) => setAmount(e.target.value)}
+                value={transactionData.amount || ''}
+                name="amount"
+                onChange={handleOnChange}
                 className="w-full border p-2 rounded focus:outline-none focus:ring-2
                 focus:ring-green-400 [appearance:textfield]"
             />
 
             <input
                 type="text"
-                placeholder="Category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                placeholder="Note"
+                value={transactionData.note}
+                name="note"
+                onChange={handleOnChange}
                 className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
             />
 
             <div className="flex justify-center">
               <button
                   type="submit"
-                  disabled={!(title && category && amount)}
+                  disabled={!(transactionData.title && transactionData.amount && transactionData.note)}
                   className="bg-green-500 text-white w-fit p-2 rounded cursor-pointer hover:bg-green-600
                   disabled:bg-green-300 disabled:cursor-not-allowed"
               >

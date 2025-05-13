@@ -3,17 +3,10 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import {useRouter} from "next/navigation";
 import {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime";
-
-type Transactionality = {
-    _id: number,
-    amount: number,
-    title: string,
-    category: string,
-    create_at: string,
-};
+import {TransactionType} from "@/app/types/TransactionType";
 
 export default function OneTransaction(props: { id: string, type: string }) {
-    const [transactionData, setTransactionData] = useState<Transactionality[] | undefined>();
+    const [transactionData, setTransactionData] = useState<TransactionType[] | undefined>();
     const [loading, setLoading] = useState(true);
     const handleOnDelete =  async () => {
         try {
@@ -55,7 +48,7 @@ export default function OneTransaction(props: { id: string, type: string }) {
                         {`${props.type}:  ${transaction.title}`}
                     </h1>
                     <h2 className="text-lg text-gray-500 mb-6">
-                        {transaction.category}
+                        {transaction.note}
                     </h2>
                     <h3 className="text-sm text-gray-400 mb-6">
                         {transaction.create_at}
