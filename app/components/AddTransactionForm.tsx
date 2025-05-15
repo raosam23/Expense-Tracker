@@ -95,7 +95,7 @@ const AddTransactionForm = (props : AddTransactionFormProps) => {
                   type="submit"
                   disabled={!(transactionData.title && transactionData.amount && transactionData.note)}
                   className="bg-green-500 text-white w-fit p-2 rounded cursor-pointer hover:bg-green-600
-                  disabled:bg-green-300 disabled:cursor-not-allowed"
+                  disabled:opacity-50 disabled:cursor-not-allowed"
               >
                   Add {props.type === 'expense' ? 'Expense' : 'Income'}
               </button>

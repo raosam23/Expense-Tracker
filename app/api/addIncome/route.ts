@@ -1,10 +1,11 @@
 import {NextRequest, NextResponse} from "next/server";
 import fs from 'fs';
 import path from 'path';
+import {TransactionType} from "@/app/types/TransactionType";
 
 export async function POST (req: NextRequest) {
     try{
-        const body = await req.json();
+        const body: TransactionType = await req.json();
         console.log("incoming expense", body);
         body.amount = Number(body.amount);
         const filepath: string = path.join(process.cwd(), '/Incomes.json');
