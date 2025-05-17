@@ -1,14 +1,14 @@
+import ProfilePage from "../components/ProfilePage";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
 import { redirect } from "next/navigation";
-import ExpensesOrIncomeInput from "@/app/components/ExpensesOrIncomeInput";
 
-export default async function Add() {
+export default async function Profile() {
     const session = await getServerSession(authOptions);
     if(!session) redirect('/login');
-    return (
+    return(
         <div>
-            <ExpensesOrIncomeInput />
+            <ProfilePage />
         </div>
-    )
-}
+    );
+};

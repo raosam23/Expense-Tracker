@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^6.8.0",
     "axios": "^1.8.4",
+    "bcrypt": "^6.0.0",
     "chart.js": "^4.4.9",
     "next": "15.3.0",
     "next-auth": "^4.24.11",
@@ -21,11 +23,13 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
+    "prisma": "^6.8.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

@@ -2,7 +2,7 @@
 import React, {useState} from 'react';
 import Link from "next/link";
 import {UserType} from "@/app/types/UserType";
-import axios from "axios";
+import { signIn } from 'next-auth/react';
 
 const LogInForm = () => {
     const [userData, setUserData] = useState<UserType>({
@@ -18,11 +18,14 @@ const LogInForm = () => {
     }
     const handleBtnOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        //TODO: handle login in the backend
         console.log(userData);
         try {
-            const response = await axios.post('/api/login', userData);
-            console.log("Response",  response);
+            const response = await signIn("credentials", {
+                username: userData.username,
+                password: userData.password,
+                redirect: true,
+                callbackUrl: "/",
+            });
         } catch (error: unknown) {
             const err = error as Error;
             console.log(err.message);

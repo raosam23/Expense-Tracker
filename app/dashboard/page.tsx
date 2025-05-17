@@ -1,7 +1,14 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/utils/authOptions";
+import { redirect } from "next/navigation";
 import Expenses from "@/app/components/Expenses";
-import Incomes from "@/app/components/Incomes";import ExpensesIncomePie from "@/app/components/ExpensesIncomePie";
+import Incomes from "@/app/components/Incomes";
+import ExpensesIncomePie from "@/app/components/ExpensesIncomePie";
 
-export default function Dashboard() {
+
+export default async function Dashboard() {
+    const session = await getServerSession(authOptions);
+    if(!session) redirect("/login");
     return (
         <>
             <div className="flex flex-row justify-center min-w-auto">

@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import Link from "next/link";
 import {UserType} from "@/app/types/UserType";
 import axios from "axios";
+import { signIn } from 'next-auth/react';
 
 const SignUpForm = () => {
     const [userData, setUserData] = useState<UserType>({
@@ -20,10 +21,16 @@ const SignUpForm = () => {
     }
     const handleBtnOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        //TODO: write logic to handle submit button for signup
         console.log(userData);
         try {
             const response = await axios.post('/api/signup', userData);
+            if(response.status === 200) {
+                await signIn("credentials", {
+                    username: userData.username,
+                    password: userData.password,
+                    callbackUrl: "/",
+                });
+            }
             console.log('response', response.data);
         } catch (error: unknown) {
             const err = error as Error;
