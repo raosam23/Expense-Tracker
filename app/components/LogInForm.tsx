@@ -3,12 +3,16 @@ import React, {useState} from 'react';
 import Link from "next/link";
 import {UserType} from "@/app/types/UserType";
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 const LogInForm = () => {
+    const router: AppRouterInstance = useRouter();
     const [userData, setUserData] = useState<UserType>({
         username: '',
         password: ''
     });
+    const [error, setError] = useState<string | null>(null);
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
         setUserData((prevData: UserType) => ({
@@ -18,22 +22,25 @@ const LogInForm = () => {
     }
     const handleBtnOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setError(null)
         console.log(userData);
         try {
             const response = await signIn("credentials", {
                 username: userData.username,
                 password: userData.password,
-                redirect: true,
-                callbackUrl: "/",
+                redirect: false,
             });
+            if(response?.error) {
+                const msg = "Username or password is incorrect"
+                setError(msg);
+                console.warn(error);
+            } else if(response?.ok) {
+                router.push('/');
+            }
         } catch (error: unknown) {
             const err = error as Error;
-            console.log(err.message);
-        } finally {
-            setUserData({
-                username: '',
-                password: ''
-            });
+            console.error(err.message);
+            setError(err.message);
         }
     }
 
@@ -81,6 +88,11 @@ const LogInForm = () => {
                     Log In
                 </button>
             </div>
+            {error && (
+                <div className='text-red-600 text-sm text-center font-medium'>
+                    {error}
+                </div>
+            )}
             <p className="text-sm text-center">
                 Don&apos;t have an account?&nbsp;<strong><Link href="/signup">Sign up</Link></strong></p>
         </form>

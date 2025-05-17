@@ -4,14 +4,18 @@ import Link from "next/link";
 import {UserType} from "@/app/types/UserType";
 import axios from "axios";
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 const SignUpForm = () => {
+    const router: AppRouterInstance = useRouter();
     const [userData, setUserData] = useState<UserType>({
         fullName: '',
         username: '',
         email: '',
         password: '',
     });
+    const [error, setError] = useState<string | null>(null);
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
         setUserData((prevData: UserType) => ({
@@ -21,6 +25,7 @@ const SignUpForm = () => {
     }
     const handleBtnOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setError(null);
         console.log(userData);
         try {
             const response = await axios.post('/api/signup', userData);
@@ -28,20 +33,25 @@ const SignUpForm = () => {
                 await signIn("credentials", {
                     username: userData.username,
                     password: userData.password,
-                    callbackUrl: "/",
+                    redirect: false
                 });
+                router.push('/');
             }
             console.log('response', response.data);
-        } catch (error: unknown) {
-            const err = error as Error;
-            console.log(err.message);
-        } finally {
-            setUserData({
-                fullName: '',
-                username: '',
-                email: '',
-                password: '',
-            })
+        } catch (e: unknown) {
+            if (axios.isAxiosError(e)) {
+                if (e.response?.status === 409) {
+                    setError("User already exists");
+                    console.warn(e);
+                } else {
+                    setError("Something went wrong, try again later");
+                    console.error(e);
+                }
+            } else {
+                const err = e as Error;
+                setError(err.message);
+                console.error(err.message);
+            }
         }
     }
 
@@ -112,6 +122,11 @@ const SignUpForm = () => {
                     Sign Up
                 </button>
             </div>
+            {error && (
+                <div className='text-red-600 text-sm text-center font-medium'>
+                    {error}
+                </div>
+            )}
             <p className="text-sm text-center">
                 Already have an account?&nbsp;<strong><Link href="/login">Log in</Link></strong>
             </p>
