@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
+  id           String         @id @default(uuid())
   fullName     String
   username     String         @unique
   email        String         @unique
@@ -23,14 +23,14 @@ model User {
 }
 
 model Transactions {
-  id        Int             @id @default(autoincrement())
+  id        String          @id @default(uuid())
   title     String
   amount    Float
   note      String?
   type      TransactionType
   createdAt DateTime        @default(now())
   user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int
+  userId    String
 }
 
 enum TransactionType {

@@ -36,7 +36,7 @@ export default function OneTransaction(props: { id: string }) {
                     });
                     if(res.status === 200) {
                         const allTransactions = res.data.transactions;
-                        const specificTransaction = allTransactions.filter((trans: TransactionType) => trans.id === Number(props.id));
+                        const specificTransaction = allTransactions.filter((trans: TransactionType) => trans.id === props.id);
                         setTransactionData(specificTransaction);
                     }
                 }

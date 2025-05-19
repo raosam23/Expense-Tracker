@@ -12,7 +12,7 @@ const Incomes = ({transactions} : propTypes) => {
         <div className="flex flex-col items-center max-w-fit mx-2.5">
             <h1 className="text-3xl text-center font-bold">Income</h1>
             {incomes.length > 0 ? incomes.map((income, index: number) => (
-                <TransactionsCard key={index} id={Number(income.id)} title={income.title} note={income.note} amount={Number(income.amount)} type={"INCOME"} />
+                <TransactionsCard key={index} id={income.id} title={income.title} note={income.note} amount={Number(income.amount)} type={"INCOME"} />
             )):
                 <p className="my-4 text-xl text-center font-bold text-green-950">No transactions yet</p>
             }

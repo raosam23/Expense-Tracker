@@ -8,7 +8,7 @@ export type TransactionInputType = {
 }
 
 export type TransactionType = TransactionInputType & {
-    id?: number,
+    id?: string,
     userId: number,
     createAt: string,
 }

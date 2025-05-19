@@ -88,7 +88,7 @@ export async function DELETE(req: NextRequest) {
             return NextResponse.json({success: false, message: "Transaction id is missing in the search parameter"}, {status: 400});
         }
         await prisma.transactions.delete({
-            where : {id: Number(transactionId)}
+            where : {id: transactionId}
         })
 
         return NextResponse.json({success: true, message: 'Transaction is deleted succesfully'}, {status: 200});
