@@ -4,17 +4,24 @@ import axios from "axios";
 import {useRouter} from "next/navigation";
 import {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime";
 import {TransactionType} from "@/app/types/TransactionType";
+import { useSession } from 'next-auth/react';
 
-export default function OneTransaction(props: { id: string, type: string }) {
+export default function OneTransaction(props: { id: string }) {
     const [transactionData, setTransactionData] = useState<TransactionType[] | undefined>();
     const [loading, setLoading] = useState(true);
+    const {data: session} = useSession();
+    const username = session?.user?.email;
     const handleOnDelete =  async () => {
         try {
-            if(props.type === 'income')
-                await axios.delete('/api/addIncome?id='+props.id);
-            else if(props.type === 'expenses')
-                await axios.delete('/api/addExpense?id='+props.id);
-            router.back();
+            if(username) {
+                const res = await axios.delete('/api/transaction', {
+                    params: {id: props.id},
+                });
+                if(res.status === 200) {
+                    alert('Transaction has been deleted');
+                    router.push('/dashboard');
+                }
+            }
         } catch (error) {
             console.error(error);
         }
@@ -23,10 +30,16 @@ export default function OneTransaction(props: { id: string, type: string }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(
-                    props.type === 'income' ? '/api/addIncome' : '/api/addExpense'
-                );
-                setTransactionData(res.data.data);
+                if(username) {
+                    const res = await axios.get('/api/transaction', {
+                        params : {username}
+                    });
+                    if(res.status === 200) {
+                        const allTransactions = res.data.transactions;
+                        const specificTransaction = allTransactions.filter((trans: TransactionType) => trans.id === Number(props.id));
+                        setTransactionData(specificTransaction);
+                    }
+                }
             } catch (e) {
                 console.error(`Failed to fetch data: ${e}`);
             } finally {
@@ -34,9 +47,9 @@ export default function OneTransaction(props: { id: string, type: string }) {
             }
         };
         fetchData();
-    }, [props.type]);
+    }, [username]);
 
-    const transaction = transactionData?.find(t => String(t._id) === props.id);
+    const transaction = transactionData?.find(t => String(t.id) === props.id);
     const router: AppRouterInstance = useRouter();
     return (
         <div className="flex justify-center items-center">
@@ -45,15 +58,15 @@ export default function OneTransaction(props: { id: string, type: string }) {
             ) : transaction ? (
                 <div className="bg-green-200 shadow-xl rounded-lg p-10 w-full max-w-md min-h-fit text-center">
                     <h1 className="text-3xl font-extrabold text-gray-900 mb-2">
-                        {`${props.type}:  ${transaction.title}`}
+                        {`${transaction.type}:  ${transaction.title}`}
                     </h1>
                     <h2 className="text-lg text-gray-500 mb-6">
                         {transaction.note}
                     </h2>
                     <h3 className="text-sm text-gray-400 mb-6">
-                        {transaction.create_at}
+                        {transaction.createAt}
                     </h3>
-                    {props.type === "expenses" ? (
+                    {transaction.type === "EXPENSE" ? (
                         <div className="text-2xl font-bold text-red-600">
                             ₹{transaction.amount}
                         </div>

@@ -2,27 +2,23 @@
 import {Pie} from "react-chartjs-2";
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from "chart.js";
 import React, {useEffect, useState} from "react";
-import axios from "axios";
 import {TransactionType} from "@/app/types/TransactionType";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const ExpensesIncomePie = () => {
+interface propTypes {
+    transactions: TransactionType[]
+}
+
+const ExpensesIncomePie = ({transactions} : propTypes) => {
     const [incomesData, setIncomesData] = useState<TransactionType[]>([]);
     const [expensesData, setExpensesData] = useState<TransactionType[]>([]);
-    useEffect(() => {(async () => {
-        try {
-            const exRes = await axios.get('/api/addExpense');
-            const inRes = await axios.get('/api/addIncome');
-            setIncomesData(inRes.data.data);
-            setExpensesData(exRes.data.data);
-        } catch (e) {
-            console.error(`Failed to fetch data: ${e}`);
-        }
-    })();
-    }, []);
     const [expenseTotal, setExpenseTotal] = React.useState<number>(0);
     const [incomeTotal, setIncomeTotal] = React.useState<number>(0);
+    useEffect(()=>{
+        setIncomesData(transactions.filter((tran: TransactionType) => tran.type === 'INCOME'));
+        setExpensesData(transactions.filter((tran: TransactionType) => tran.type === 'EXPENSE')); 
+    }, [transactions]);
     useEffect(() => {
         let eTotal: number = 0;
         let iTotal: number = 0;

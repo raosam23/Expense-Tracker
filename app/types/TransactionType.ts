@@ -1,7 +1,14 @@
-export type TransactionType = {
-    _id?: number,
+export type TransactionCategory = "INCOME" | "EXPENSE"
+
+export type TransactionInputType = {
     title: string,
     amount: string | number,
     note: string,
-    create_at?: string,
+    type: TransactionCategory,
+}
+
+export type TransactionType = TransactionInputType & {
+    id?: number,
+    userId: number,
+    createAt: string,
 }
