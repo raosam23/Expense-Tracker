@@ -1,23 +1,24 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import {useRouter} from "next/navigation";
-import {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime";
-import {TransactionType} from "@/app/types/TransactionType";
+import { useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { TransactionType } from "@/app/types/TransactionType";
 import { useSession } from 'next-auth/react';
+import LoadingSpinner from './LoadingSpinner';
 
 export default function OneTransaction(props: { id: string }) {
     const [transactionData, setTransactionData] = useState<TransactionType[] | undefined>();
     const [loading, setLoading] = useState(true);
-    const {data: session} = useSession();
+    const { data: session } = useSession();
     const username = session?.user?.email;
-    const handleOnDelete =  async () => {
+    const handleOnDelete = async () => {
         try {
-            if(username) {
+            if (username) {
                 const res = await axios.delete('/api/transaction', {
-                    params: {id: props.id},
+                    params: { id: props.id },
                 });
-                if(res.status === 200) {
+                if (res.status === 200) {
                     alert('Transaction has been deleted');
                     router.push('/dashboard');
                 }
@@ -29,12 +30,13 @@ export default function OneTransaction(props: { id: string }) {
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
-                if(username) {
+                if (username) {
                     const res = await axios.get('/api/transaction', {
-                        params : {username}
+                        params: { username }
                     });
-                    if(res.status === 200) {
+                    if (res.status === 200) {
                         const allTransactions = res.data.transactions;
                         const specificTransaction = allTransactions.filter((trans: TransactionType) => trans.id === props.id);
                         setTransactionData(specificTransaction);
@@ -54,7 +56,7 @@ export default function OneTransaction(props: { id: string }) {
     return (
         <div className="flex justify-center items-center">
             {loading ? (
-                <div className="text-gray-700 text-lg">Loading transaction...</div>
+                <LoadingSpinner />
             ) : transaction ? (
                 <div className="bg-green-200 shadow-xl rounded-lg p-10 w-full max-w-md min-h-fit text-center">
                     <h1 className="text-3xl font-extrabold text-gray-900 mb-2">
@@ -80,7 +82,7 @@ export default function OneTransaction(props: { id: string }) {
                             <button onClick={handleOnDelete}>Delete</button>
                         </div>
                         <div className="bg-green-500 text-white w-fit p-2 rounded hover:bg-green-600">
-                            <button onClick={() => router.back() }>Back</button>
+                            <button onClick={() => router.back()}>Back</button>
                         </div>
                     </div>
                 </div>
