@@ -1,14 +1,14 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { TransactionType } from "@/app/types/TransactionType";
 import { useSession } from 'next-auth/react';
 import LoadingSpinner from './LoadingSpinner';
 
 export default function OneTransaction(props: { id: string }) {
-    const [transactionData, setTransactionData] = useState<TransactionType[] | undefined>();
+    const [transactionData, setTransactionData] = useState<TransactionType | undefined>();
     const [loading, setLoading] = useState(true);
     const { data: session } = useSession();
     const username = session?.user?.email;
@@ -34,12 +34,11 @@ export default function OneTransaction(props: { id: string }) {
             try {
                 if (username) {
                     const res = await axios.get('/api/transaction', {
-                        params: { username }
+                        params: { id : props.id}
                     });
                     if (res.status === 200) {
-                        const allTransactions = res.data.transactions;
-                        const specificTransaction = allTransactions.filter((trans: TransactionType) => trans.id === props.id);
-                        setTransactionData(specificTransaction);
+                        const transaction = res.data.transaction;
+                        setTransactionData(transaction);
                     }
                 }
             } catch (e) {
@@ -51,35 +50,38 @@ export default function OneTransaction(props: { id: string }) {
         fetchData();
     }, [username]);
 
-    const transaction = transactionData?.find(t => String(t.id) === props.id);
     const router: AppRouterInstance = useRouter();
+    const pathName: string = usePathname();
     return (
         <div className="flex justify-center items-center">
             {loading ? (
                 <LoadingSpinner />
-            ) : transaction ? (
+            ) : transactionData ? (
                 <div className="bg-green-200 shadow-xl rounded-lg p-10 w-full max-w-md min-h-fit text-center">
                     <h1 className="text-3xl font-extrabold text-gray-900 mb-2">
-                        {`${transaction.type}:  ${transaction.title}`}
+                        {`${transactionData.type}:  ${transactionData.title}`}
                     </h1>
                     <h2 className="text-lg text-gray-500 mb-6">
-                        {transaction.note}
+                        {transactionData.note}
                     </h2>
                     <h3 className="text-sm text-gray-400 mb-6">
-                        {transaction.createAt}
+                        {transactionData.createAt}
                     </h3>
-                    {transaction.type === "EXPENSE" ? (
+                    {transactionData.type === "EXPENSE" ? (
                         <div className="text-2xl font-bold text-red-600">
-                            ₹{transaction.amount}
+                            ₹{transactionData.amount}
                         </div>
                     ) : (
                         <div className="text-2xl font-bold text-green-600">
-                            ₹{transaction.amount}
+                            ₹{transactionData.amount}
                         </div>
                     )}
                     <div className="flex justify-center space-x-4 m-4">
                         <div className="bg-red-500 text-white w-fit p-2 rounded hover:bg-red-600">
                             <button onClick={handleOnDelete}>Delete</button>
+                        </div>
+                        <div className="bg-green-800 text-white w-fit p-2 rounded hover:bg-green-900">
+                            <button onClick={() => router.push(`${pathName}/edit`)}>Edit</button>
                         </div>
                         <div className="bg-green-500 text-white w-fit p-2 rounded hover:bg-green-600">
                             <button onClick={() => router.back()}>Back</button>

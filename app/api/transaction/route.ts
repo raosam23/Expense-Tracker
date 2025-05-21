@@ -53,22 +53,32 @@ export async function GET(req: NextRequest) {
         }
         const { searchParams } = new URL(req.url);
         const username = searchParams.get("username");
-        if(!username) {
-            return NextResponse.json({success: false, message: "Username parameter is missing in the query"}, {status: 400});
+        const id = searchParams.get("id");
+        if(!username && !id) {
+            return NextResponse.json({success: false, message: "Username or id parameter is required in the query"}, {status: 400});
         }
 
-        const user = await prisma.user.findUnique({
-            where: {username: username},
-            include: {transactions: true}
-        });
-        if(!user) {
-            return NextResponse.json({success: false, message: "User not Found"}, {status: 404});
-        }
-        const transactions = await prisma.transactions.findMany({
-            where: {userId: user.id}
-        })
+        if(id) {
+            const transaction = await prisma.transactions.findUnique({
+                where : { id }
+            });
+            if(!transaction) {
+                return NextResponse.json({success: false, message: 'Transaction not found'}, {status: 404});
+            }
+            return NextResponse.json({success: true, transaction}, {status: 200});
+        }   
+
+        if(username) {
+            const user = await prisma.user.findUnique({
+                where: {username: username},
+                include: {transactions: true}
+            });
+            if(!user) {
+                return NextResponse.json({success: false, message: "User not Found"}, {status: 404});
+            }
+            return NextResponse.json({success: true, transactions: user.transactions}, {status: 200});
+        }     
         
-        return NextResponse.json({success: true, transactions}, {status: 200});
     } catch (error: unknown) {
         const err = error as Error;
         console.error(err.message);
@@ -92,6 +102,35 @@ export async function DELETE(req: NextRequest) {
         })
 
         return NextResponse.json({success: true, message: 'Transaction is deleted succesfully'}, {status: 200});
+
+    } catch (error: unknown) {
+        const err = error as Error;
+        console.error(err.message);
+        return NextResponse.json({success: false, message: err.message}, {status: 500});
+    }
+}
+
+export async function PATCH(req: NextRequest) {
+    try {
+        const session = await getServerSession(authOptions);
+        if(!session || !session.user || !session.user.email) {
+            return NextResponse.json({success: false, message: "Unauthorized"}, {status: 401});
+        }
+        const body = await req.json();
+        const {id, title, note, amount} = body;
+        if(!id || !title || !note || isNaN(Number(amount))) {
+            return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
+        }
+        const updatedTransaction = await prisma.transactions.update({
+            where : {id},
+            data : {
+                title,
+                amount : Number(amount),
+                note
+            }
+        });
+
+        return NextResponse.json({ success: true, transaction: updatedTransaction }, { status: 200 });
 
     } catch (error: unknown) {
         const err = error as Error;
