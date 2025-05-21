@@ -6,7 +6,7 @@ import ExpensesIncomePie from './ExpensesIncomePie';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
 import { TransactionType } from '../types/TransactionType';
-import LoadingSpinner from './LoadingSpinner';
+import {LoadingSpinner} from './LoadingSpinner';
 
 
 const TransactionContainer = () => {

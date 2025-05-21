@@ -5,6 +5,7 @@ import {UserType} from "@/app/types/UserType";
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import {SmallLoadingSpinner} from './LoadingSpinner';
 
 const LogInForm = () => {
     const router: AppRouterInstance = useRouter();
@@ -13,6 +14,7 @@ const LogInForm = () => {
         password: ''
     });
     const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
         setUserData((prevData: UserType) => ({
@@ -24,6 +26,7 @@ const LogInForm = () => {
         event.preventDefault();
         setError(null)
         console.log(userData);
+        setIsLoading(true);
         try {
             const response = await signIn("credentials", {
                 username: userData.username,
@@ -34,13 +37,16 @@ const LogInForm = () => {
                 const msg = "Username or password is incorrect"
                 setError(msg);
                 console.warn(error);
+                setIsLoading(false);
             } else if(response?.ok) {
                 router.push('/');
+                setIsLoading(false);
             }
         } catch (error: unknown) {
             const err = error as Error;
             console.error(err.message);
             setError(err.message);
+            setIsLoading(false);
         }
     }
 
@@ -81,7 +87,7 @@ const LogInForm = () => {
             <div className="flex justify-center">
                 <button
                     type="submit"
-                    disabled={checkIfUserDataEmpty()}
+                    disabled={checkIfUserDataEmpty() || isLoading}
                     className="w-auto px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition duration-200 cursor-pointer
                     disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -91,6 +97,11 @@ const LogInForm = () => {
             {error && (
                 <div className='text-red-600 text-sm text-center font-medium'>
                     {error}
+                </div>
+            )}
+            {isLoading && (
+                <div className='flex justify-center items-center h-full'>
+                    <SmallLoadingSpinner />
                 </div>
             )}
             <p className="text-sm text-center">

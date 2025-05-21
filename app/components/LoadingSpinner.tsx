@@ -7,10 +7,19 @@ const override = {
     margin: '100px auto'
 }
 
-const LoadingSpinner = () => {
+export const LoadingSpinner = () => {
     return (
         <ClipLoader color='#10b981' size={150} cssOverride={override} aria-label='Loading Spinner' />
     )
 }
 
-export default LoadingSpinner
+const smallOverride = {
+    display: 'block',
+    margin: '20px auto'
+}
+
+export const SmallLoadingSpinner = () => {
+    return (
+        <ClipLoader color='#10b981' size={25} cssOverride={smallOverride} aria-label='Loading Spinner' />
+    )
+}

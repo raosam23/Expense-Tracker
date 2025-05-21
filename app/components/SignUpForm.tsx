@@ -6,6 +6,7 @@ import axios from "axios";
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { SmallLoadingSpinner } from './LoadingSpinner';
 
 const SignUpForm = () => {
     const router: AppRouterInstance = useRouter();
@@ -16,6 +17,7 @@ const SignUpForm = () => {
         password: '',
     });
     const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
         setUserData((prevData: UserType) => ({
@@ -27,6 +29,7 @@ const SignUpForm = () => {
         event.preventDefault();
         setError(null);
         console.log(userData);
+        setIsLoading(true);
         try {
             const response = await axios.post('/api/signup', userData);
             if(response.status === 200) {
@@ -36,21 +39,24 @@ const SignUpForm = () => {
                     redirect: false
                 });
                 router.push('/');
+                setIsLoading(false);
             }
-            console.log('response', response.data);
         } catch (e: unknown) {
             if (axios.isAxiosError(e)) {
                 if (e.response?.status === 409) {
                     setError("User already exists");
                     console.warn(e);
+                    setIsLoading(false);
                 } else {
                     setError("Something went wrong, try again later");
                     console.error(e);
+                    setIsLoading(false);
                 }
             } else {
                 const err = e as Error;
                 setError(err.message);
                 console.error(err.message);
+                setIsLoading(false);
             }
         }
     }
@@ -117,7 +123,7 @@ const SignUpForm = () => {
                     type="submit"
                     className="w-auto px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition duration-200 cursor-pointer
                     disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled={checkIfUserDataEmpty()}
+                    disabled={checkIfUserDataEmpty() || isLoading}
                 >
                     Sign Up
                 </button>
@@ -125,6 +131,11 @@ const SignUpForm = () => {
             {error && (
                 <div className='text-red-600 text-sm text-center font-medium'>
                     {error}
+                </div>
+            )}
+            {isLoading && (
+                <div className='flex justify-center items-center h-full'>
+                    <SmallLoadingSpinner />
                 </div>
             )}
             <p className="text-sm text-center">

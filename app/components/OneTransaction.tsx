@@ -5,7 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { TransactionType } from "@/app/types/TransactionType";
 import { useSession } from 'next-auth/react';
-import LoadingSpinner from './LoadingSpinner';
+import {LoadingSpinner} from './LoadingSpinner';
 
 export default function OneTransaction(props: { id: string }) {
     const [transactionData, setTransactionData] = useState<TransactionType | undefined>();

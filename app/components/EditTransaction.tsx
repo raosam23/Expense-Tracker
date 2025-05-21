@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import { TransactionType, TransactionInputType } from "../types/TransactionType";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "./LoadingSpinner";
+import {LoadingSpinner} from "./LoadingSpinner";
 
 const EditTransactionPage = ({ id }: { id: string }) => {
   const router = useRouter();
