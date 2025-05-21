@@ -16,7 +16,6 @@ const TransactionsCard = (props: TransactionWithoutUserID) => {
             });
             if(res.status === 200) {
                 alert('Transaction has been deleted');
-                //TODO: route to transaction for now reloading
                 window.location.reload();
             }
         } catch (error) {
