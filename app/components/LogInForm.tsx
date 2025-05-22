@@ -1,11 +1,12 @@
 'use client';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Link from "next/link";
-import {UserType} from "@/app/types/UserType";
+import { UserType } from "@/app/types/UserType";
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import {SmallLoadingSpinner} from './LoadingSpinner';
+import { SmallLoadingSpinner } from './LoadingSpinner';
+import { Eye, EyeOff } from 'lucide-react';
 
 const LogInForm = () => {
     const router: AppRouterInstance = useRouter();
@@ -13,10 +14,11 @@ const LogInForm = () => {
         username: '',
         password: ''
     });
+    const [showPassword, setShowPassword] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setUserData((prevData: UserType) => ({
             ...prevData,
             [name]: value
@@ -33,12 +35,12 @@ const LogInForm = () => {
                 password: userData.password,
                 redirect: false,
             });
-            if(response?.error) {
+            if (response?.error) {
                 const msg = "Username or password is incorrect"
                 setError(msg);
                 console.warn(error);
                 setIsLoading(false);
-            } else if(response?.ok) {
+            } else if (response?.ok) {
                 router.push('/');
                 setIsLoading(false);
             }
@@ -50,15 +52,15 @@ const LogInForm = () => {
         }
     }
 
-    const checkIfUserDataEmpty: () => boolean = ():  boolean => {
-        return  userData.username === '' || userData.password === '';
+    const checkIfUserDataEmpty: () => boolean = (): boolean => {
+        return userData.username === '' || userData.password === '';
     }
 
     return (
         <form
             className="bg-green-200 rounded-lg shadow-md px-8 py-10 m-6 w-full max-w-md mx-auto space-y-6"
             onSubmit={handleBtnOnSubmit}
-            >
+        >
             <h2 className="text-center text-4xl mb-10 font-bold text-green-900">Login</h2>
             <div>
                 <label className="block text-sm font-medium text-green-800 mb-2">Username</label>
@@ -74,15 +76,32 @@ const LogInForm = () => {
             </div>
             <div>
                 <label className="block text-sm font-medium text-green-800 mb-2">Password</label>
-                <input
-                    type="password"
-                    placeholder="Enter your password"
-                    className="w-full border border-green-300 p-3 rounded focus:outline-none focus:ring-2
+                <div className='relative'>
+                    <input
+                        type={!showPassword ? "password" : "text"}
+                        placeholder="Enter your password"
+                        className="w-full border border-green-300 p-3 rounded focus:outline-none focus:ring-2
                     focus:ring-green-500"
-                    value={userData.password}
-                    name="password"
-                    onChange={handleOnChange}
-                />
+                        value={userData.password}
+                        name="password"
+                        onChange={handleOnChange}
+                    />
+                    <button className='absolute right-2 top-1/2 mr-1.5   transform -translate-y-1/2 text-sm text-green-500 cursor-pointer'
+                        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                            event.preventDefault();
+                        }}
+                        onMouseLeave={()=> {
+                            setShowPassword(false);
+                        }}
+                        onMouseDown={() => {
+                            setShowPassword(true);
+                        }} onMouseUp={() => {
+                            setShowPassword(false);
+                        }}>
+                        {showPassword ? (<Eye color='green' size={20} />) : (<EyeOff color='green' size={20} />)}
+                    </button>
+                </div>
+
             </div>
             <div className="flex justify-center">
                 <button
@@ -104,8 +123,10 @@ const LogInForm = () => {
                     <SmallLoadingSpinner />
                 </div>
             )}
-            <p className="text-sm text-center">
-                Don&apos;t have an account?&nbsp;<strong><Link href="/signup">Sign up</Link></strong></p>
+            {!isLoading && <p className="text-sm text-center">
+                Don&apos;t have an account?&nbsp;<strong><Link href="/signup">Sign up</Link></strong>
+            </p>
+            }
         </form>
     );
 };

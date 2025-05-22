@@ -7,6 +7,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { SmallLoadingSpinner } from './LoadingSpinner';
+import { Eye, EyeOff } from 'lucide-react';
 
 const SignUpForm = () => {
     const router: AppRouterInstance = useRouter();
@@ -18,6 +19,7 @@ const SignUpForm = () => {
     });
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
         setUserData((prevData: UserType) => ({
@@ -108,8 +110,9 @@ const SignUpForm = () => {
             </div>
             <div>
                 <label className="block text-sm font-medium text-green-800 mb-2">Password</label>
+                <div className='relative'>
                 <input
-                    type="password"
+                    type={!showPassword ? "password" : "text"}
                     placeholder="Enter your password"
                     className="w-full border border-green-300 p-3 rounded focus:outline-none focus:ring-2
                     focus:ring-green-500"
@@ -117,6 +120,21 @@ const SignUpForm = () => {
                     name="password"
                     onChange={handleOnChange}
                 />
+                    <button className='absolute right-2 top-1/2 mr-1.5   transform -translate-y-1/2 text-sm text-green-500 cursor-pointer' 
+                    onClick={(event:React.MouseEvent<HTMLButtonElement>) => {
+                        event.preventDefault();
+                    }}
+                    onMouseLeave={()=> {
+                        setShowPassword(false);
+                    }}
+                    onMouseDown={()=>{
+                        setShowPassword(true);
+                    }} onMouseUp={()=>{
+                        setShowPassword(false);
+                    }}>
+                        {showPassword ? (<Eye color='green' size={20} />) : (<EyeOff color='green' size={20}/>)}
+                    </button>
+                </div>
             </div>
             <div className="flex justify-center">
                 <button
@@ -138,9 +156,9 @@ const SignUpForm = () => {
                     <SmallLoadingSpinner />
                 </div>
             )}
-            <p className="text-sm text-center">
+            {!isLoading && <p className="text-sm text-center">
                 Already have an account?&nbsp;<strong><Link href="/login">Log in</Link></strong>
-            </p>
+            </p>}
         </form>
     );
 };
