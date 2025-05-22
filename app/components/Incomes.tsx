@@ -20,4 +20,4 @@ const Incomes = ({transactions} : propTypes) => {
     )
 }
 
-export default Incomes;
+export default Incomes
