@@ -3,7 +3,9 @@ import React from 'react'
 import Link from "next/link";
 import axios, { AxiosResponse } from "axios";
 import { TransactionType } from '../types/TransactionType';
-export interface TransactionWithoutUserID extends Omit<TransactionType, 'userId' | 'createAt'> {}
+export interface TransactionWithoutUserID extends Omit<TransactionType, 'userId' | 'createAt'> {
+    setTransactions?: React.Dispatch<React.SetStateAction<TransactionType[]>>,
+}
 
 
 const TransactionsCard = (props: TransactionWithoutUserID) => {
@@ -14,9 +16,8 @@ const TransactionsCard = (props: TransactionWithoutUserID) => {
             const res: AxiosResponse = await axios.delete('/api/transaction',{
                 params: {id: props.id}
             });
-            if(res.status === 200) {
-                alert('Transaction has been deleted');
-                window.location.reload();
+            if(res.status === 200 && props.setTransactions) {
+                props.setTransactions((prev) => prev.filter(t => t.id !== props.id));
             }
         } catch (error) {
             console.error(error);

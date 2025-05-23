@@ -42,8 +42,8 @@ const TransactionContainer = () => {
                 <LoadingSpinner />
                 : <div>
                     <div className="flex flex-row justify-center min-w-auto">
-                        <Expenses transactions={transactions} />
-                        <Incomes transactions={transactions} />
+                        <Expenses transactions={transactions} setTransactions={setTransactions}/>
+                        <Incomes transactions={transactions} setTransactions={setTransactions}/>
                     </div>
                     <div className="w-full flex justify-center my-4 p-5">
                         <ExpensesIncomePie transactions={transactions} />
