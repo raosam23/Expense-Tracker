@@ -1,9 +1,9 @@
-import Hero from "@/app/components/Hero";
+import Homepage from "@/app/components/Homepage";
 
 export default function Home() {
   return (
       <div>
-          <Hero />
+          <Homepage />
       </div>
   );
 }

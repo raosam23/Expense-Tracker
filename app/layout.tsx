@@ -21,10 +21,10 @@ export default function RootLayout({
     <AuthProvider>
       <html lang="en">
         <body className="bg-customGreen text-green-900">
-          <header className="p-14">
+          <header className="p-14 mx-16">
             <Navbar />
           </header>
-          <main className="p-4 max-w-4xl mx-auto my-auto">{children}</main>
+          <main className="p-4 max-w-5/6 mx-auto my-auto">{children}</main>
           <footer className="p-4 text-center text-xs text-green-900">{`©${getCurrentYear()} Expense-Tracker`}</footer>
         </body>
       </html>
