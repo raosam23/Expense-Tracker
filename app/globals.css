@@ -1,9 +1,15 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @layer utilities {
-    .bg-customGreen {
-        background-color: #9cbc94;
-    }
-    .text-customGreen {
-        color: #62755c;
-    }
+  .bg-customGreen {
+    background-color: #9cbc94;
+  }
+  .text-customGreen {
+    color: #14532a;
+  }
+  .bg-darkCustomGreen {
+    background-color: #1a1f1b;
+  }
+  .text-darkCustomGreen {
+    color: #b7f5b1;
+  }
 }

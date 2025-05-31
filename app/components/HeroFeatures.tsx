@@ -10,7 +10,7 @@ const HeroFeatures = () => {
           Say goodbye to manual tracking! Our automated income categorization feature intelligently sorts your earnings,
           making it easier to manage your finances.
         </p>
-        <ul className="list-disc pl-6 space-y-2 text-lg text-green-900">
+        <ul className="list-disc pl-6 space-y-2 text-lg">
           <li>Save time and reduce errors in tracking income.</li>
           <li>Get insights into your income sources effortlessly.</li>
           <li>Stay organized and in control of your finances.</li>

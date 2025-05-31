@@ -1,13 +1,11 @@
-import React from "react";
-import TransactionsCard from "@/app/components/TransactionsCard";
-import { TransactionType } from "@/app/types/TransactionType";
-import { useTransactionStore } from "../store/transactionStore";
+import React from 'react';
+import TransactionsCard from '@/app/components/TransactionsCard';
+import { TransactionType } from '@/app/types/TransactionType';
+import { useTransactionStore } from '../store/transactionStore';
 
 const Incomes = () => {
   const { transactions } = useTransactionStore();
-  const incomes = transactions.filter(
-    (tran: TransactionType) => tran.type === "INCOME",
-  );
+  const incomes = transactions.filter((tran: TransactionType) => tran.type === 'INCOME');
   return (
     <div className="flex flex-col items-center max-w-fit mx-2.5">
       <h1 className="text-3xl text-center font-bold">Income</h1>
@@ -19,13 +17,11 @@ const Incomes = () => {
             title={income.title}
             note={income.note}
             amount={Number(income.amount)}
-            type={"INCOME"}
+            type={'INCOME'}
           />
         ))
       ) : (
-        <p className="my-4 text-xl text-center font-bold text-green-950">
-          No transactions yet
-        </p>
+        <p className="my-4 text-xl text-center font-bold">No transactions yet</p>
       )}
     </div>
   );

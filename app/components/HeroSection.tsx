@@ -12,14 +12,14 @@ const HeroSection = () => {
         </p>
         <div className="space-x-5">
           <Link href="/add">
-            <button className="bg-green-800 text-green-100 px-6 py-2 rounded hover:bg-green-950 cursor-pointer">
+            <button className="bg-green-800 text-green-100 px-6 py-2 rounded hover:bg-green-950 cursor-pointer transition duration-200">
               Getting Started
             </button>
           </Link>
           <Link href="/about">
             <button
               className="border border-green-900 text-green-900 px-6 py-2 rounded hover:bg-green-900
-            hover:text-green-100 cursor-pointer"
+            hover:text-green-100 cursor-pointer transition duration-200"
             >
               Learn More
             </button>
