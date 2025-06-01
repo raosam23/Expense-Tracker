@@ -79,13 +79,13 @@ export default function OneTransaction(props: { id: string }) {
             <div className="text-2xl font-bold text-green-600">₹{transactionData.amount}</div>
           )}
           <div className="flex justify-center space-x-4 m-4">
-            <div className="bg-red-500 text-white w-fit p-2 rounded hover:bg-red-600">
+            <div className="bg-red-500 text-white w-fit p-2 rounded hover:bg-red-600 transition duration-200">
               <button onClick={handleOnDelete}>Delete</button>
             </div>
-            <div className="bg-green-800 text-white w-fit p-2 rounded hover:bg-green-900">
+            <div className="bg-green-800 text-white w-fit p-2 rounded hover:bg-green-900 transition duration-200">
               <button onClick={() => router.push(`${pathName}/edit`)}>Edit</button>
             </div>
-            <div className="bg-green-500 text-white w-fit p-2 rounded hover:bg-green-600">
+            <div className="bg-green-500 text-white w-fit p-2 rounded hover:bg-green-600 transition duration-200">
               <button onClick={() => router.back()}>Back</button>
             </div>
           </div>
