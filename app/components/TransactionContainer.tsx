@@ -1,12 +1,12 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import Expenses from "./Expenses";
-import Incomes from "./Incomes";
-import ExpensesIncomePie from "./ExpensesIncomePie";
-import { useSession } from "next-auth/react";
-import axios from "axios";
-import { useTransactionStore } from "../store/transactionStore";
-import { LoadingSpinner } from "./LoadingSpinner";
+'use client';
+import React, { useEffect, useState } from 'react';
+import Expenses from './Expenses';
+import Incomes from './Incomes';
+import ExpensesIncomePie from './ExpensesIncomePie';
+import { useSession } from 'next-auth/react';
+import axios from 'axios';
+import { useTransactionStore } from '../store/transactionStore';
+import { LoadingSpinner } from './LoadingSpinner';
 
 const TransactionContainer = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -18,7 +18,7 @@ const TransactionContainer = () => {
       setLoading(true);
       try {
         if (username) {
-          const res = await axios.get("/api/transaction", {
+          const res = await axios.get('/api/transaction', {
             params: { username },
           });
           if (res.status === 200) {

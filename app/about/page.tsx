@@ -1,9 +1,9 @@
-import AboutPage from "@/app/components/AboutPage";
+import AboutPage from '@/app/components/AboutPage';
 
 export default function About() {
-    return (
-        <div>
-            <AboutPage />
-        </div>
-    )
+  return (
+    <div>
+      <AboutPage />
+    </div>
+  );
 }

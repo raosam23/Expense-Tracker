@@ -1,10 +1,10 @@
-import {NextRequest, NextResponse} from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import fs from 'fs';
 import path from 'path';
-import {TransactionType} from "@/app/types/TransactionType";
+import { TransactionType } from "@/app/types/TransactionType";
 
-export async function POST (req: NextRequest) {
-    try{
+export async function POST(req: NextRequest) {
+    try {
         const body: TransactionType = await req.json();
         console.log("incoming expense", body);
         body.amount = Number(body.amount);
@@ -15,10 +15,10 @@ export async function POST (req: NextRequest) {
         body.createAt = new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
         existingData.push(body);
         fs.writeFileSync(filepath, JSON.stringify(existingData, null, 2));
-        return NextResponse.json({success: true,}, {status: 200});
+        return NextResponse.json({ success: true, }, { status: 200 });
     } catch (e: unknown) {
         const err = e as Error
-        return NextResponse.json({success: false, message: err.message},{status: 500});
+        return NextResponse.json({ success: false, message: err.message }, { status: 500 });
     }
 }
 
@@ -27,32 +27,32 @@ export async function GET() {
         const filepath: string = path.join(process.cwd(), '/Incomes.json');
         const fileExists: boolean = fs.existsSync(filepath);
         const data = fileExists ? JSON.parse(fs.readFileSync(filepath, 'utf-8')) : [];
-        return NextResponse.json({success: true, data: data});
-    } catch(e: unknown) {
+        return NextResponse.json({ success: true, data: data });
+    } catch (e: unknown) {
         const err = e as Error;
-        return NextResponse.json({success: false, message: err.message},{status: 500})
+        return NextResponse.json({ success: false, message: err.message }, { status: 500 })
     }
 }
 
-export async function DELETE (req: NextRequest) {
+export async function DELETE(req: NextRequest) {
     try {
         const url = new URL(req.url);
-        const id: string|null = url.searchParams.get('id');
-        if(!id) {
-            return NextResponse.json({success:false, message: 'Income not found'}, {status: 400});
+        const id: string | null = url.searchParams.get('id');
+        if (!id) {
+            return NextResponse.json({ success: false, message: 'Income not found' }, { status: 400 });
         }
         const filepath: string = path.join(process.cwd(), '/Incomes.json');
         const fileExists: boolean = fs.existsSync(filepath);
-        if(!fileExists) {
-            return NextResponse.json({success: false, message: 'Incomes file not found'}, {status: 404});
+        if (!fileExists) {
+            return NextResponse.json({ success: false, message: 'Incomes file not found' }, { status: 404 });
         }
 
         const existingData = JSON.parse(fs.readFileSync(filepath, 'utf-8'));
-        const filteredData = existingData.filter((data : {_id: number}) => data._id !== Number(id))
+        const filteredData = existingData.filter((data: { _id: number }) => data._id !== Number(id))
         fs.writeFileSync(filepath, JSON.stringify(filteredData, null, 2));
-        return NextResponse.json({success: true, message: 'Income deleted'}, {status: 200});
+        return NextResponse.json({ success: true, message: 'Income deleted' }, { status: 200 });
     } catch (e: unknown) {
         const err = e as Error;
-        return NextResponse.json({success: false, message: err.message}, {status: 500});
+        return NextResponse.json({ success: false, message: err.message }, { status: 500 });
     }
 }

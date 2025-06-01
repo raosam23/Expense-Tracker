@@ -9,18 +9,18 @@ export async function DELETE() {
     try {
         const session = await getServerSession(authOptions);
 
-        if(!session || !session.user?.email) {
-            return NextResponse.json({error: "Unauthorized"}, {status: 401});
+        if (!session || !session.user?.email) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
-        
+
         await prisma.user.delete({
-            where: {username: session.user.email},
+            where: { username: session.user.email },
         });
 
-        return NextResponse.json({message: "Account deleted successfully"}, {status: 200});
-    } catch(error: unknown) {
+        return NextResponse.json({ message: "Account deleted successfully" }, { status: 200 });
+    } catch (error: unknown) {
         const err = error as Error;
         console.error(err.message);
-        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
